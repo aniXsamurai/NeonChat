@@ -15,13 +15,20 @@ const messageInput  = document.getElementById('message-input');
 const chatMessages  = document.getElementById('chat-messages');
 const joinError     = document.getElementById('join-error');
 
+const defaultActionGroup = document.getElementById('default-action-group');
+const directJoinGroup    = document.getElementById('direct-join-group');
+const btnDirectJoin      = document.getElementById('btn-direct-join');
+const directJoinRoomCode = document.getElementById('direct-join-room-code');
+
 // Modal refs
-const roomModal     = document.getElementById('room-modal');
-const modalRoomCode = document.getElementById('modal-room-code');
-const btnCopyCode   = document.getElementById('btn-copy-code');
-const copyFeedback  = document.getElementById('copy-feedback');
-const btnEnterRoom  = document.getElementById('btn-enter-room');
-const btnCopyHeader = document.getElementById('btn-copy-header');
+const roomModal      = document.getElementById('room-modal');
+const modalRoomCode  = document.getElementById('modal-room-code');
+const modalRoomLink  = document.getElementById('modal-room-link');
+const btnCopyCode    = document.getElementById('btn-copy-code');
+const btnCopyLink    = document.getElementById('btn-copy-link');
+const copyFeedback   = document.getElementById('copy-feedback');
+const btnEnterRoom   = document.getElementById('btn-enter-room');
+const btnCopyHeader  = document.getElementById('btn-copy-header');
 
 // ---- Utilities ----
 function generateRoomCode() {
@@ -65,16 +72,31 @@ btnHost.addEventListener('click', () => {
     currentUsername = username;
     currentRoom = generateRoomCode();
 
-    // Show the share modal first
+    // Build a direct join link using the current origin so it works in all environments
+    const roomLink = `${window.location.origin}?room=${currentRoom}`;
+
+    // Show the share modal first, with both code and link
     modalRoomCode.textContent = currentRoom;
+    if (modalRoomLink) {
+        modalRoomLink.textContent = roomLink;
+    }
     copyFeedback.classList.add('hidden');
     roomModal.classList.remove('hidden');
 });
 
-// Copy button inside modal
+// Copy button inside modal (room code)
 btnCopyCode.addEventListener('click', () => {
     copyToClipboard(currentRoom, copyFeedback);
 });
+
+// Copy button for direct join link
+if (btnCopyLink) {
+    btnCopyLink.addEventListener('click', () => {
+        if (!currentRoom) return;
+        const roomLink = `${window.location.origin}?room=${currentRoom}`;
+        copyToClipboard(roomLink, copyFeedback);
+    });
+}
 
 // Enter Room from modal — connect only when user clicks this
 btnEnterRoom.addEventListener('click', () => {
@@ -88,12 +110,29 @@ roomCodeInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') joinRoom();
 });
 
+if (btnDirectJoin) {
+    btnDirectJoin.addEventListener('click', joinRoom);
+}
+
+usernameInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        if (directJoinGroup && !directJoinGroup.classList.contains('hidden')) {
+            joinRoom();
+        }
+    }
+});
+
 function joinRoom() {
     const username = usernameInput.value.trim();
     const room     = roomCodeInput.value.trim().toUpperCase();
 
-    if (!username || !room) {
-        joinError.textContent = '❌ Enter both a Codename and a Room Code.';
+    if (!username) {
+        joinError.textContent = '❌ Enter a Codename first.';
+        joinError.classList.remove('hidden');
+        return;
+    }
+    if (!room) {
+        joinError.textContent = '❌ Enter a Room Code.';
         joinError.classList.remove('hidden');
         return;
     }
@@ -182,6 +221,31 @@ btnSend.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
+
+// ---- URL PARAM HANDLING (direct join links) ----
+// If someone opens ?room=ABC123 (e.g. https://neonchat-6dzo.onrender.com?room=ABC123)
+// pre-fill the room code so they just need to choose a Codename and hit JOIN.
+(function prefillRoomFromUrl() {
+    try {
+        const params = new URLSearchParams(window.location.search);
+        const roomFromUrl = params.get('room');
+        if (roomFromUrl && roomCodeInput) {
+            const room = roomFromUrl.toUpperCase();
+            roomCodeInput.value = room;
+            
+            if (defaultActionGroup && directJoinGroup) {
+                defaultActionGroup.classList.add('hidden');
+                directJoinGroup.classList.remove('hidden');
+                if (directJoinRoomCode) directJoinRoomCode.innerText = `[${room}]`;
+            }
+
+            usernameInput && usernameInput.focus();
+        }
+    } catch (e) {
+        // Ignore malformed URLs
+        console.warn('Could not parse room code from URL', e);
+    }
+})();
 
 // ---- REACTIONS ----
 function sendReaction(messageId, emoji) {

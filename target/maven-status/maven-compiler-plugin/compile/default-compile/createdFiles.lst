@@ -1,5 +1,0 @@
-com\chatflow\Application.class
-com\chatflow\model\ChatMessage$MessageType.class
-com\chatflow\model\ChatMessage.class
-com\chatflow\config\WebSocketConfig.class
-com\chatflow\controller\ChatController.class
