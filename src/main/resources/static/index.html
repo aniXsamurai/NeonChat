@@ -21,6 +21,13 @@
                 <button id="btn-copy-code" class="copy-btn">📋 Copy</button>
             </div>
             <p id="copy-feedback" class="copy-feedback hidden">✅ Copied to clipboard!</p>
+
+            <p class="modal-sub" style="margin-top:1.25rem;">Or share this link to join directly:</p>
+            <div class="code-display-box">
+                <span id="modal-room-link" class="room-link-text"></span>
+                <button id="btn-copy-link" class="copy-btn">📋 Copy</button>
+            </div>
+
             <button id="btn-enter-room" class="neon-btn cyan" style="width:100%;margin-top:1.5rem;">ENTER ROOM →</button>
         </div>
     </div>
@@ -34,16 +41,23 @@
                 <input type="text" id="username" placeholder="Enter your Codename" autocomplete="off" />
             </div>
             
-            <div class="action-buttons">
-                <button id="btn-host" class="neon-btn pink">HOST ROOM</button>
+            <div id="default-action-group">
+                <div class="action-buttons">
+                    <button id="btn-host" class="neon-btn pink">HOST ROOM</button>
+                </div>
+                
+                <div class="divider">OR</div>
+                
+                <div class="form-group join-group">
+                    <input type="text" id="room-code-input" placeholder="Enter Room Code" autocomplete="off" maxlength="6" style="text-transform:uppercase;" />
+                    <button id="btn-join" class="neon-btn-join">JOIN</button>
+                </div>
+            </div>
+
+            <div id="direct-join-group" class="hidden">
+                 <button id="btn-direct-join" class="neon-btn cyan" style="width: 100%;">JOIN ROOM <span id="direct-join-room-code"></span></button>
             </div>
             
-            <div class="divider">OR</div>
-            
-            <div class="form-group join-group">
-                <input type="text" id="room-code-input" placeholder="Enter Room Code" autocomplete="off" maxlength="6" style="text-transform:uppercase;" />
-                <button id="btn-join" class="neon-btn-join">JOIN</button>
-            </div>
             <p id="join-error" class="join-error hidden">❌ Enter both a Codename and a valid Room Code.</p>
         </div>
     </div>
