@@ -2,150 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <!-- ✅ Responsive -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Neon ChatRooms</title>
-
-    <!-- ✅ FAVICON -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut icon" href="/favicon.ico">
-
-    <!-- (Optional better support) -->
-    <link rel="apple-touch-icon" href="/favicon.ico">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="/css/style.css">
-
-    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- WebSocket -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
-
 <body>
 
-    <!-- Room Code Share Modal -->
+    <!-- Room Code Share Modal (shown after hosting) -->
     <div id="room-modal" class="modal-overlay hidden">
         <div class="modal-box">
             <h3>⚡ Room Created!</h3>
             <p class="modal-sub">Share this code with your friends to join:</p>
-
             <div class="code-display-box">
                 <span id="modal-room-code"></span>
                 <button id="btn-copy-code" class="copy-btn">📋 Copy</button>
             </div>
-
             <p id="copy-feedback" class="copy-feedback hidden">✅ Copied to clipboard!</p>
-
-            <p class="modal-sub" style="margin-top:1.25rem;">
-                Or share this link to join directly:
-            </p>
-
-            <div class="code-display-box">
-                <span id="modal-room-link" class="room-link-text"></span>
-                <button id="btn-copy-link" class="copy-btn">📋 Copy</button>
-            </div>
-
-            <button id="btn-enter-room" class="neon-btn cyan" style="width:100%;margin-top:1.5rem;">
-                ENTER ROOM →
-            </button>
+            <button id="btn-enter-room" class="neon-btn cyan" style="width:100%;margin-top:1.5rem;">ENTER ROOM →</button>
         </div>
     </div>
 
-    <!-- Welcome Page -->
     <div id="welcome-page" class="page-container">
         <div class="neon-panel">
-            <h1 class="neon-title">
-                NEON<span class="cyan-text">CHAT</span>
-            </h1>
-
+            <h1 class="neon-title">NEON<span class="cyan-text">CHAT</span></h1>
             <p>Welcome to the grid. Connect with your peers.</p>
-
+            
             <div class="form-group">
                 <input type="text" id="username" placeholder="Enter your Codename" autocomplete="off" />
             </div>
-
-            <div id="default-action-group">
-                <div class="action-buttons">
-                    <button id="btn-host" class="neon-btn pink">
-                        HOST ROOM
-                    </button>
-                </div>
-
-                <div class="divider">OR</div>
-
-                <div class="form-group join-group">
-                    <input type="text" id="room-code-input"
-                        placeholder="Enter Room Code"
-                        autocomplete="off"
-                        maxlength="6"
-                        style="text-transform:uppercase;" />
-
-                    <button id="btn-join" class="neon-btn-join">
-                        JOIN
-                    </button>
-                </div>
+            
+            <div class="action-buttons">
+                <button id="btn-host" class="neon-btn pink">HOST ROOM</button>
             </div>
-
-            <div id="direct-join-group" class="hidden">
-                <button id="btn-direct-join" class="neon-btn cyan" style="width: 100%;">
-                    JOIN ROOM <span id="direct-join-room-code"></span>
-                </button>
+            
+            <div class="divider">OR</div>
+            
+            <div class="form-group join-group">
+                <input type="text" id="room-code-input" placeholder="Enter Room Code" autocomplete="off" maxlength="6" style="text-transform:uppercase;" />
+                <button id="btn-join" class="neon-btn-join">JOIN</button>
             </div>
-
-            <p id="join-error" class="join-error hidden">
-                ❌ Enter both a Codename and a valid Room Code.
-            </p>
+            <p id="join-error" class="join-error hidden">❌ Enter both a Codename and a valid Room Code.</p>
         </div>
     </div>
 
-    <!-- Chat Page -->
     <div id="chat-page" class="page-container hidden">
         <div class="chat-container">
-
             <div class="chat-header">
                 <div>
-                    <h2>
-                        Room:
-                        <span id="room-code-display" class="cyan-text"></span>
-
-                        <button id="btn-copy-header"
-                                class="copy-inline-btn"
-                                title="Copy room code">
-                            📋
-                        </button>
+                    <h2>Room: <span id="room-code-display" class="cyan-text"></span>
+                        <button id="btn-copy-header" class="copy-inline-btn" title="Copy room code to share">📋</button>
                     </h2>
-
                     <div class="online-indicator">
                         <span class="dot"></span> Online
                     </div>
                 </div>
-
-                <button id="btn-leave" class="neon-btn-small pink">
-                    Leave
-                </button>
+                <button id="btn-leave" class="neon-btn-small pink">Leave</button>
             </div>
-
-            <div id="chat-messages" class="chat-messages"></div>
-
+            
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages go here -->
+            </div>
+            
             <div class="chat-input-container">
-                <input type="text" id="message-input"
-                       placeholder="Type a message..."
-                       autocomplete="off"/>
-
-                <button id="btn-send" class="neon-btn cyan send-btn">
-                    SEND
-                </button>
+                <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off"/>
+                <button id="btn-send" class="neon-btn cyan send-btn">SEND</button>
             </div>
         </div>
     </div>
 
-    <!-- JS -->
     <script src="/js/app.js"></script>
-
 </body>
 </html>
